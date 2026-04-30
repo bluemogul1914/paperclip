@@ -77,5 +77,11 @@ ENV NODE_ENV=production \
 VOLUME ["/paperclip"]
 EXPOSE 3100
 
+RUN python3 -m pip install hermes-ai git+https://github.com/NousResearch/hermes-agent.git --break-system-packages --root-user-action=ignore 2>/dev/null; \
+    printf '#!/usr/bin/env python3\nimport sys\nfrom hermes_cli.main import main\nsys.exit(main())\n' > /usr/local/bin/hermes && \
+    chmod +x /usr/local/bin/hermes && \
+    mkdir -p /paperclip/.hermes/logs /paperclip/.hermes/sessions /paperclip/.hermes/skills && \
+    chmod -R 777 /paperclip/.hermes
+    
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["node", "--import", "./server/node_modules/tsx/dist/loader.mjs", "server/dist/index.js"]
