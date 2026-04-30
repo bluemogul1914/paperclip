@@ -28,6 +28,8 @@ services:
       BETTER_AUTH_SECRET: '${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set}'
     volumes:
       - paperclip-data:/paperclip
+      - /usr/local/lib/hermes-agent:/usr/local/lib/hermes-agent:ro
+      - /root/.hermes:/root/.hermes:ro
     depends_on:
       db:
         condition: service_healthy
